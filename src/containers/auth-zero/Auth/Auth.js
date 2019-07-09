@@ -1,8 +1,8 @@
-import auth0 from "auth0-js";
-import { AUTH_CONFIG } from "./auth0-variables";
-import history from "../history";
-import jwtDecode from "jwt-decode";
-import axios from "axios";
+import auth0 from 'auth0-js';
+import { AUTH_CONFIG } from './auth0-variables';
+import history from '../history';
+import jwtDecode from 'jwt-decode';
+import axios from 'axios';
 
 export default class Auth {
   accessToken;
@@ -16,8 +16,8 @@ export default class Auth {
     domain: AUTH_CONFIG.domain,
     clientID: AUTH_CONFIG.clientId,
     redirectUri: AUTH_CONFIG.callbackUrl,
-    responseType: "token id_token",
-    scope: "openid profile email offline_access",
+    responseType: 'token id_token',
+    scope: 'openid profile email offline_access',
     sso: false
   });
 
@@ -32,7 +32,7 @@ export default class Auth {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.setSession(authResult);
       } else if (err) {
-        history.replace("/");
+        history.replace('/');
       }
     });
   };
@@ -55,10 +55,10 @@ export default class Auth {
     this.idToken = authResult.idToken;
     this.expiresAt = expiresAt;
     // Set isLoggedIn flag in localStorage
-    localStorage.setItem("isLoggedIn", "true");
-    localStorage.setItem("access_token", authResult.accessToken);
-    localStorage.setItem("id_token", authResult.idToken);
-    localStorage.setItem("expires_at", expiresAt);
+    localStorage.setItem('isLoggedIn', 'true');
+    localStorage.setItem('access_token', authResult.accessToken);
+    localStorage.setItem('id_token', authResult.idToken);
+    localStorage.setItem('expires_at', expiresAt);
 
     //-------------------- schedule a token renewal --------------------
     const decoded = jwtDecode(localStorage.id_token && localStorage.id_token);
@@ -80,13 +80,17 @@ export default class Auth {
 
     try {
       if (addUser.full_name) {
-        history.replace("/dashboard");
+        history.replace('/dashboard');
       } else {
-        history.replace("/onboarding");
+        history.replace('/onboarding');
       }
     } catch (error) {
       console.log(error.message);
     }
+  };
+
+  isAuthenticated = () => {
+    return localStorage.id_token ? true : false;
   };
 
   // -------------------- logout user --------------------
@@ -99,15 +103,15 @@ export default class Auth {
 
     function removeCookies() {
       var res = document.cookie;
-      var multiple = res.split(";");
+      var multiple = res.split(';');
       for (var i = 0; i < multiple.length; i++) {
-        var key = multiple[i].split("=");
+        var key = multiple[i].split('=');
         document.cookie =
-          key[0] + " =; expires = Thu, 01 Jan 1970 00:00:00 UTC";
+          key[0] + ' =; expires = Thu, 01 Jan 1970 00:00:00 UTC';
       }
     }
     removeCookies();
 
-    history.replace("/");
+    history.replace('/');
   };
 }

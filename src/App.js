@@ -1,11 +1,12 @@
-import React from "react";
-import { Route, Switch } from "react-router-dom";
-import Auth from "./containers/auth-zero/Auth/Auth.js";
-import Dashboard from "./containers/Dashboard";
-import LandingPage from "./containers/LandingPage";
-import Callback from "./containers/auth-zero/Callback/Callback";
-import "./App.css";
-import Onborading from "./containers/Onboarding/Onboarding.js";
+import React from 'react';
+import { Route, Switch } from 'react-router-dom';
+import Auth from './containers/auth-zero/Auth/Auth.js';
+import Dashboard from './containers/Dashboard';
+import LandingPage from './containers/LandingPage';
+import Callback from './containers/auth-zero/Callback/Callback';
+import './App.css';
+import Onborading from './containers/Onboarding/Onboarding.js';
+import PrivateRoute from './components/PrivateRoute';
 
 const auth = new Auth();
 
@@ -31,11 +32,11 @@ function App() {
             return <Callback {...props} />;
           }}
         />
-        <Route
+        <PrivateRoute
           path="/dashboard"
           render={props => <Dashboard {...props} auth={auth} />}
         />
-        <Route
+        <PrivateRoute
           path="/onboarding"
           render={props => <Onborading {...props} auth={auth} />}
         />
