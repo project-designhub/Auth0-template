@@ -1,24 +1,45 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { Route, Switch } from "react-router-dom";
+import Auth from "./containers/auth-zero/Auth/Auth.js";
+import Dashboard from "./containers/Dashboard";
+import LandingPage from "./containers/LandingPage";
+import Callback from "./containers/auth-zero/Callback/Callback";
+import "./App.css";
+import Onborading from "./containers/Onboarding/Onboarding.js";
+
+const auth = new Auth();
+
+const handleAuthentication = ({ location }) => {
+  if (/access_token|id_token|error/.test(location.hash)) {
+    auth.handleAuthentication();
+  }
+};
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Switch>
+        <Route
+          exact
+          path="/"
+          render={props => <LandingPage {...props} auth={auth} />}
+        />
+        <Route
+          path="/callback"
+          render={props => {
+            handleAuthentication(props);
+            return <Callback {...props} />;
+          }}
+        />
+        <Route
+          path="/dashboard"
+          render={props => <Dashboard {...props} auth={auth} />}
+        />
+        <Route
+          path="/onboarding"
+          render={props => <Onborading {...props} auth={auth} />}
+        />
+      </Switch>
     </div>
   );
 }
